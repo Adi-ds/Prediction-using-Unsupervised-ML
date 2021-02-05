@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-###   **Objective**  
+### **Objective**  
 Here, we were given to predict the optimum number of clusters and represent it visually.
 
 #### *Tools used*  

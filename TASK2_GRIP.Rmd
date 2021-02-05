@@ -1,0 +1,147 @@
+---
+title: "Prediction using Unsupervised ML"
+author: "Aditya Dawn"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###   **Objective**  
+Here, we were given to predict the optimum number of clusters and represent it visually.
+
+#### *Tools used*  
+* R for predicting the optimum number of clusters and visualization.
+* R Markdown for making the presentation.  
+
+### **Importing of Data**   
+```{r echo=TRUE}
+df <- read.csv("/home/adi/Documents/Aditya/TSF-GRIPFEB21/Iris.csv", header = TRUE)
+```
+
+##### View Data  
+```{r echo=TRUE}
+head(df)
+```
+
+### **Preprocessing of the dataset**  
+* Structure of the dataset  
+```{r echo=TRUE}
+str(df)
+```
+
+* Summary of the dataset  
+```{r echo=TRUE}
+summary(df)
+```
+
+As clustering is a type of Unsupervised Learning, Class Label(output) are not necessary during execution of our algorithm. We will, therefore, remove the feature “Species”.  
+Also, we will remove the feature "Id".  
+  
+  
+```{r echo=TRUE}
+df <- df[,2:5]
+head(df)
+```
+
+### **Optimum number of Clusters**  
+Here, we are going to use the *elbow method* to find the optimum number of clusters. This method consists of plotting the explained variation as a function of the number of clusters and picking the elbow of the curve as the number of clusters to use.  
+```{r echo=TRUE, message=FALSE}
+library(factoextra)
+```
+```{r echo=TRUE}
+fviz_nbclust(df, kmeans, method = "wss") +
+geom_vline(xintercept = 3, linetype = 2)
+```
+  
+Clearly the elbow is created at $3$ in the above curve.  
+
+So, the optimum number of clusters will be **3**.  
+
+
+### **Model**
+Now, we create a model with 3 clusters.  
+```{r echo=TRUE}
+result <- kmeans(df , 3)
+```
+* Cluster Sizes  
+```{r echo=TRUE}
+result$size
+```
+* We can also look at which clusters do the observations belong to.  
+```{r echo=TRUE}
+result$cluster
+```
+
+### **Visualization**
+```{r echo=TRUE}
+plot(df[,-5], col=result$cluster)
+```
+  
+The above plot clearly shows the 3 clusters. Though, we can view the plots seperately as follows :   
+```{r echo=TRUE}
+df$cluster <- as.character(result$cluster)
+head(df)
+```
+```{r echo=TRUE}
+library(ggplot2)
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = SepalLengthCm, 
+                           y = SepalWidthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nSepalLengthCm vs SepalWidthCm\n') +
+  theme_light()
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = SepalLengthCm, 
+                           y = PetalLengthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nSepalLengthCm vs PetalLengthCm\n') +
+  theme_light()
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = SepalLengthCm, 
+                           y = PetalWidthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nSepalLengthCm vs PetalWidthCm\n') +
+  theme_light()
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = SepalWidthCm, 
+                           y = PetalLengthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nPetalLengthCm vs SepalWidthCm\n') +
+  theme_light()
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = SepalWidthCm, 
+                           y = PetalWidthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nPetalWidthCm vs SepalWidthCm\n') +
+  theme_light()
+```
+```{r echo=TRUE}
+ggplot() +
+  geom_point(data = df, 
+             mapping = aes(x = PetalLengthCm, 
+                           y = PetalWidthCm, 
+                           colour = cluster)) +
+  labs ( title = '\nPetalLengthCm vs PetalWidthCm\n') +
+  theme_light()
+```
+
+
+## Thank You!
